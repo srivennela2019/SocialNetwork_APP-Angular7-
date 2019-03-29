@@ -1,0 +1,143 @@
+<div class="container">
+  <h2 style="margin-left:10em;">{{current_user[0].fname}}'s Timeline</h2>
+  <hr>
+  <form style="margin-left:15em;">
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <label class="sr-only" for="inlineFormInput">Title</label>
+        <input type="text" class="form-control mb-2" [(ngModel)]="title" name="title" id="inlineFormInput" placeholder="Title">
+      </div>
+      <div class="col-auto">
+        <label class="sr-only" for="inlineFormInputGroup2">Content</label>
+        <div class="input-group mb-2">
+          <input type="text" class="form-control" [(ngModel)]="content" name="content" id="inlineFormInputGroup2" placeholder="Content">
+        </div>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-2" (click)='Post()'>Post</button>
+      </div>
+    </div>
+  </form>
+  <hr>
+  <div *ngFor="let post of posts">
+
+    <div class="card" style="width: 40rem;margin-left:15em;">
+      <div class="card-header">
+        Posted by <span class="text text-primary">{{getDecodedAccessToken(post.token)}}</span>
+      </div>
+      <div class="card-body">
+
+        <a [routerLink]="['/posts/details',post._id]"> {{post.head}}</a><br> {{post.body}}
+        <br>
+        <span class="text text-primary">Likes: {{post.likes}}</span><span style="padding:10px;"></span>
+        <hr>
+        <button class="btn btn-sm btn-primary" (click)='Like(post._id)'>Like</button>
+        <span style="padding:10px;"></span>
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" [attr.data-target]="'#m' + post._id">
+           Liked
+          </button><span style="padding:10px;"></span>
+        <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" [attr.data-target]="'#t' + post._id" aria-expanded="false"
+          aria-controls="collapseExample">
+            Comments
+          </button>
+        <span style="padding:10px;"></span><button class="btn btn-sm btn-danger" *ngIf='getDecodedAccessToken(post.token) == current_user_comp'
+          (click)='Delete(post._id)'>Delete</button>
+        <span style="padding:10px;"></span> <button type="button" class="btn btn-sm btn-warning" *ngIf='getDecodedAccessToken(post.token) == current_user_comp'
+          data-toggle="modal" [attr.data-target]="'#e' + post._id">
+          Edit
+         </button>
+        <br>
+        <div class="collapse" [id]="'t'+post._id">
+          <hr>
+          <form>
+            <div class="form-row align-items-center">
+              <div class="col-auto">
+                <label class="sr-only" for="inlineFormInputGroupc">Comment</label>
+                <div class="input-group input-group-sm mb-2">
+                  <input type="text" class="form-control" [(ngModel)]="comment" name="comment" id="inlineFormInputGroupc" placeholder="Comment">
+                </div>
+              </div>
+              <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-info mb-2" (click)='Comment(post._id)'>Comment</button>
+              </div>
+            </div>
+          </form>
+          <hr>
+          <h5 class="text text-primary">Comments</h5>
+          <table width='100%'>
+            <tr *ngFor="let comm of comments">
+              <span *ngIf='comm.postid==post._id'> 
+                      <p class="text text-dark">{{getDecodedAccessToken(comm.token)}}</p>
+                     <p class="text text-secondary">{{comm.comment}}</p>
+                     <hr>
+                   </span>
+
+            </tr>
+          </table>
+
+
+        </div>
+        <div class="modal fade" [id]="'m'+post._id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Likes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <table width='100%'>
+                  <tr *ngFor="let like of likes">
+                    <span *ngIf='like.postid==post._id'> 
+                            <p class="text text-dark">{{getDecodedAccessToken(like.utoken)}}</p>
+                           <hr>
+                         </span>
+
+                  </tr>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" [id]="'e'+post._id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label for="exampleInputEmail8">Title</label>
+                    <input type="text" class="form-control" [(ngModel)]="edit.head" name="etitle" id="exampleInputEmail8" aria-describedby="emailHelp"
+                      placeholder="{{post.head}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword8">Body</label>
+                    <input type="text" class="form-control" [(ngModel)]="edit.body" name="econtent" id="exampleInputPassword8" placeholder="{{post.body}}">
+                  </div>
+                  <!-- <button  class="btn btn-info" (click)='Edit(post._id)'>Edit</button> -->
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" (click)='Edit(post._id)' data-dismiss="modal">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+    <br>
+  </div>
+
+</div>

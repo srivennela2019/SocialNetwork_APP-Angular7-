@@ -1,0 +1,52 @@
+<div class="container">
+  <app-panel>
+    <span panel-head>
+        Registration
+      </span>
+    <span panel-body>
+        <form [formGroup]='userForm'>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control"  placeholder="First Name" [(ngModel)]='user.username' name="username" formControlName="username">
+                <div *ngIf="!userForm.get('username').valid && userForm.get('username').touched">
+                  <div class="alert alert-danger" *ngIf="userForm.get('username').errors.required">Please enter Username</div>
+                  <div class="alert alert-danger" *ngIf="userForm.get('username').errors.minlength">Please enter valid Username</div>
+                </div>
+              </div>
+              <div class="form-group">
+                  <label>Password</label>
+                  <input type="pwd" class="form-control"  placeholder="First Name" [(ngModel)]='user.password' name="password" formControlName="password">
+                  <div *ngIf="!userForm.get('password').valid && userForm.get('password').touched">
+                    <div class="alert alert-danger" *ngIf="userForm.get('password').errors.required">Please enter Password</div>
+                    <div class="alert alert-danger" *ngIf="userForm.get('password').errors.minlength">Please enter valid Password</div>
+                  </div>
+                </div>
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" class="form-control"  placeholder="First Name" [(ngModel)]='user.fname' name="firstname" formControlName="firstname">
+            <div *ngIf="!userForm.get('firstname').valid && userForm.get('firstname').touched">
+              <div class="alert alert-danger" *ngIf="userForm.get('firstname').errors.required">Please enter first name</div>
+              <div class="alert alert-danger" *ngIf="userForm.get('firstname').errors.minlength">Please enter valid first name</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label >Last Name</label>
+            <input type="text" class="form-control" placeholder="Last Name" [(ngModel)]='user.lname' name="lastname" formControlName="lastname">
+            <div *ngIf="!userForm.get('lastname').valid && userForm.get('lastname').touched">
+              <div class="alert alert-danger" *ngIf="userForm.get('lastname').errors.required">Please enter last name</div>
+              <div class="alert alert-danger" *ngIf="userForm.get('lastname').errors.minlength">Please enter valid last name</div>
+            </div>
+          </div>
+    
+            <label>Gender</label>
+            Male <input type="radio" value="male"  formControlName="gender" [(ngModel)]='user.gender' name="gender">
+            Female <input type="radio"  value="female"   formControlName="gender" [(ngModel)]='user.gender' name="gender">
+            <div  *ngIf="!userForm.get('gender').valid && userForm.get('gender').touched">
+              <div class="alert alert-danger" *ngIf="userForm.get('gender').errors.required">Please enter gender</div>
+            </div>
+         <br>
+        <button  class="btn btn-warning" [disabled]='!userForm.valid' (click)='addNewUser()'>Submit</button>
+        </form>
+      </span>
+  </app-panel>
+</div>

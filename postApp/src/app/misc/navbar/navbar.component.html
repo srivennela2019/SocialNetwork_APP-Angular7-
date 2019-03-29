@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">SocialBook</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item" routerLinkActive='active'>
+          <a class="nav-link" [routerLink]="['/login']" *ngIf="!userStatus">Login</a>
+        </li>
+          <li class="nav-item" routerLinkActive='active'>
+              <a class="nav-link" [routerLink]="['/registration']" *ngIf="!userStatus">Register</a>
+            </li>
+        <li class="nav-item" routerLinkActive='active'>
+          <a class="nav-link" [routerLink]="['/posts']" *ngIf="userStatus">Timeline</a>
+        </li>
+        <li class="nav-item mr-auto" routerLinkActive='active'>
+          <a class="nav-link"  *ngIf="userStatus" (click)='logout()'>Logout</a>
+        </li>
+       
+      </ul>
+    </div>
+  </nav>

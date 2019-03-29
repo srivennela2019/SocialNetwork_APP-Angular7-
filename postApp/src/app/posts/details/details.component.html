@@ -1,0 +1,121 @@
+<div class="container">
+    <div>
+      <div><table class="table">
+            <!--ng-if removes the entire elemnet fron the dom -->
+            
+            <tr *ngFor="let posti of posts">
+               
+              <div *ngIf="posti._id == selected_post">
+                   <h3>{{posti.head}}</h3> 
+                   <p class="text text-primary">Posted by {{getDecodedAccessToken(posti.token)}}<p>
+                   <p>{{posti.body}}</p>
+                <span class="text text-primary">Likes: <span>{{posti.likes}}</span></span><span style="padding:10px;">
+                  <hr>
+                </span>
+                <button class="btn btn-sm btn-primary"  (click)='Like(posti._id)'>Like</button>
+                <span style="padding:10px;"></span>
+                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" [attr.data-target]="'#m' + posti._id">
+                   Liked
+                  </button><span style="padding:10px;"></span>
+                <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" [attr.data-target]="'#t' + posti._id" aria-expanded="false"
+                  aria-controls="collapseExample">
+                    Comments
+                  </button>
+                <span style="padding:10px;"></span><button class="btn btn-sm btn-danger" *ngIf='getDecodedAccessToken(posti.token) == current_user_comp'
+                  (click)='Delete(posti._id)'>Delete</button>
+                <span style="padding:10px;"></span> <button type="button" class="btn btn-sm btn-warning" *ngIf='getDecodedAccessToken(posti.token) == current_user_comp' data-toggle="modal" [attr.data-target]="'#e' + posti._id">
+                  Edit
+                 </button>
+                 <div class="collapse" [id]="'t'+posti._id">
+                    <hr>
+                    <form>
+                      <div class="form-row align-items-center">
+                        <div class="col-auto">
+                          <label class="sr-only" for="inlineFormInputGroupc">Comment</label>
+                          <div class="input-group input-group-sm mb-2">
+                            <input type="text" class="form-control" [(ngModel)]="comment" name="comment" id="inlineFormInputGroupc" placeholder="Comment">
+                          </div>
+                        </div>
+                        <div class="col-auto">
+                          <button type="submit" class="btn btn-sm btn-info mb-2" (click)='Comment(posti._id)'>Comment</button>
+                        </div>
+                      </div>
+                    </form><hr>
+                    <h5 class="text text-primary">Comments</h5>
+                       <table width='100%'>
+                          <tr  *ngFor="let comm of comments" >
+                              <span *ngIf='comm.postid==posti._id'> 
+                                <p class="text text-dark">{{getDecodedAccessToken(comm.token)}}</p>
+                               <p class="text text-secondary">{{comm.comment}}</p>
+                               <hr>
+                             </span>
+                            
+                           </tr>
+                       </table>
+                       
+                    
+                  </div>
+                  <div class="modal fade" [id]="'m'+posti._id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Likes</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                          </div>
+                          <div class="modal-body">
+                              <table width='100%'>
+                                  <tr  *ngFor="let like of likes" >
+                                      <span *ngIf='like.postid==posti._id'> 
+                                        <p class="text text-dark">{{getDecodedAccessToken(like.utoken)}}</p>
+                                       <hr>
+                                     </span>
+                                    
+                                   </tr></table>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal fade" [id]="'e'+posti._id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <form>
+                                <div class="form-group">
+                                  <label for="exampleInputEmail8">Title</label>
+                                  <input type="text" class="form-control" [(ngModel)]="edit.head" name="etitle" id="exampleInputEmail8" aria-describedby="emailHelp" placeholder="{{posti.head}}">
+                                </div>
+                                <div class="form-group">
+                                  <label for="exampleInputPassword8">Body</label>
+                                  <input type="text" class="form-control" [(ngModel)]="edit.body" name="econtent" id="exampleInputPassword8" placeholder="{{posti.body}}">
+                                </div>
+                                <!-- <button  class="btn btn-info" (click)='Edit(post._id)'>Edit</button> -->
+                              </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-sm btn-secondary" (click)='Edit(posti._id)' data-dismiss="modal">Submit</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+            </div>
+            
+            </tr>
+          </table>
+         
+        </div>
+      </div>
+    <br>
+    <button class="btn btn-danger" (click)="backTimeline()">Back to list</button>
+  </div>
